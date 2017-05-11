@@ -15,8 +15,12 @@ public class Batch_ImportLeads implements Schedulable {
     
     
     public void execute(SchedulableContext ctx) {
+        doImport();
+    }
 
-        try {
+    @Future(callout=true)
+    private static void doImport(){
+                try {
             Map<String,Set<String>> domainsUsed = new Map<String,Set<String>>();
             List<Object> leads = (List<Object>)JSON.deserializeUntyped(Util.PostMan.doGet('callout:ExternalLeads?limit=10000',null).getBody()); // worse case scenario, 10'000 rows
             List<ExternalLead__c> externalLeadCandidates = new List<ExternalLead__c>();
@@ -137,8 +141,7 @@ public class Batch_ImportLeads implements Schedulable {
         }
     }
 
-
-    private Set<String> extractUUID(List<Object> paramInput) {
+    private static Set<String> extractUUID(List<Object> paramInput) {
         Set<String> uuids = new Set<String>();
 
         for (Object forRecordObject : paramInput) {
