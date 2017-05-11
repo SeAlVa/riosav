@@ -1,0 +1,40 @@
+<apex:page controller="SearchLeadsController" readOnly="true" tabStyle="Search_External_Leads__tab">
+  <apex:sectionHeader title="Search Leads"/>
+  <apex:form >
+    <apex:pageBlock mode="mainDetail">
+      <apex:pageBlockButtons location="top">
+        <apex:commandButton reRender="results" value="Search"/>
+        <apex:actionFunction name="doSearch" reRender="results"/>
+      </apex:pageBlockButtons>
+      <apex:pageBlockSection title="Filters" collapsible="false">
+        
+        <apex:inputField value="{!filter.FirstName__c}" onkeyup="return bindEnterToSearch();"/>
+        <apex:inputField value="{!filter.LastName__c}" onkeyup="return bindEnterToSearch();"/>
+        <apex:inputField value="{!filter.Industry__c}" onchange="doSearch();" />
+        <apex:inputField value="{!filter.Source__c}" onchange="doSearch();"/>
+          
+      </apex:pageBlockSection>
+      <apex:pageBlockSection id="results" title="Results" collapsible="false" columns="1" >
+        <apex:pageBlockTable value="{!leads}" var="lead">
+          <apex:column headerValue="{!$ObjectTYpe.ExternalLead__c.fields.Name.label}" value="{!lead.Name}"/>
+          <apex:column headerValue="{!$ObjectTYpe.ExternalLead__c.fields.Company__c.label}" value="{!lead.Company__c}"/>
+          <apex:column headerValue="{!$ObjectTYpe.ExternalLead__c.fields.CompanySize__c.label}" value="{!lead.CompanySize__c}"/>
+          <apex:column headerValue="{!$ObjectTYpe.ExternalLead__c.fields.Industry__c.label}" value="{!lead.Industry__c}"/>
+          <apex:column headerValue="{!$ObjectTYpe.ExternalLead__c.fields.Source__c.label}" value="{!lead.Source__c}"/>
+        </apex:pageBlockTable>
+      </apex:pageBlockSection>
+    </apex:pageBlock>
+      
+  </apex:form>
+  
+  <script type="text/javascript">
+    function bindEnterToSearch(){
+      if((event.which || event.keyCode) == 13){
+        doSearch();
+        return false;
+      } else {
+        return true;
+      }
+    }
+  </script>
+</apex:page>
