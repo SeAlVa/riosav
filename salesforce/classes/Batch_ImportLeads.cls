@@ -1,5 +1,4 @@
 public class Batch_ImportLeads implements Schedulable {
-    public static String CRON_EXP = '0 0 0 * * ? *';
     
     private static final Map<String,String> fieldMapping = new Map<String,String>{
         'uuid'              => 'UUID__c',
