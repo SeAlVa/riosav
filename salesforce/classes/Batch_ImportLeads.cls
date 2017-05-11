@@ -1,15 +1,15 @@
 public class Batch_ImportLeads implements Schedulable {
-	public static String CRON_EXP = '0 0 0 * * ? *';
+    public static String CRON_EXP = '0 0 0 * * ? *';
     
     private static final Map<String,String> fieldMapping = new Map<String,String>{
-        'uuid'				=> 'UUID__c',
-        'firstname'			=> 'FirstName__c',
-        'lastname'			=> 'LastName__c',
-        'company' 			=> 'Company__c',
-        'company_website' 	=> 'CompanyWebsite__c',
-        'company_size' 		=> 'CompanySize__c',
-        'source' 			=> 'Source__c',
-        'industry' 			=> 'Industry__c'
+        'uuid'              => 'UUID__c',
+        'firstname'         => 'FirstName__c',
+        'lastname'          => 'LastName__c',
+        'company'           => 'Company__c',
+        'company_website'   => 'CompanyWebsite__c',
+        'company_size'      => 'CompanySize__c',
+        'source'            => 'Source__c',
+        'industry'          => 'Industry__c'
     };
     
     
@@ -18,7 +18,7 @@ public class Batch_ImportLeads implements Schedulable {
 
         try {
             Map<String,Set<String>> domainsUsed = new Map<String,Set<String>>();
-        	List<Object> leads = (List<Object>)JSON.deserializeUntyped(Util.PostMan.doGet('callout:ExternalLeads?limit=10000',null).getBody()); // worse case scenario, 10'000 rows
+            List<Object> leads = (List<Object>)JSON.deserializeUntyped(Util.PostMan.doGet('callout:ExternalLeads?limit=10000',null).getBody()); // worse case scenario, 10'000 rows
             List<ExternalLead__c> externalLeadCandidates = new List<ExternalLead__c>();
 
 
@@ -40,7 +40,7 @@ public class Batch_ImportLeads implements Schedulable {
                     for (String forField : forExternalLead.keySet()){
                         
                         if (fieldMapping.get(forField) != null) {
-    	                    externalLeadCandidate.put(fieldMapping.get(forField),forExternalLead.get(forField));
+                            externalLeadCandidate.put(fieldMapping.get(forField),forExternalLead.get(forField));
                         }
                     }
                     
@@ -126,12 +126,14 @@ public class Batch_ImportLeads implements Schedulable {
                 dmlIndex++;
             }
 
-
-            Util.EmailLog.sendMail('comotucorreo@gmail.com','Import Result');
+            // @TO-DO put email in a custom setting
+            Util.EmailLog.sendMail('test@gmail.com','Import Result');
         
         } catch (Exception e) {
-        	Util.EmailLog.init(new List<String>());
-            Util.EmailLog.sendMail('comotucorreo@gmail.com','Import Leads Error:' + e);            
+            Util.EmailLog.init(new List<String>());
+
+            // @TO-DO put email in a custom setting
+            Util.EmailLog.sendMail('test@gmail.com','Import Leads Error:' + e);            
         }
     }
 
